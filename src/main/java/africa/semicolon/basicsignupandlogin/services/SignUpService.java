@@ -7,7 +7,7 @@ import africa.semicolon.basicsignupandlogin.dto.SignUpResponse;
 
 import java.util.List;
 
-public interface UserServices {
+public interface SignUpService {
     SignUpResponse signUp(SignUpRequest signUpRequest);
     void login(LoginRequest loginRequest);
 

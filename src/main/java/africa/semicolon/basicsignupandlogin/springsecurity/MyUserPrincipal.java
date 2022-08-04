@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,9 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return authorities;
+        SimpleGrantedAuthority authority =
+                 new SimpleGrantedAuthority(user.getUserRole().name());
+        return Collections.singletonList(authority);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !user.getLocked();
     }
 
     @Override
@@ -58,6 +60,6 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getEnabled();
     }
 }

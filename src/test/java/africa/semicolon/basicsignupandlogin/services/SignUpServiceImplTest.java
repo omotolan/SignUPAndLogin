@@ -9,18 +9,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-public class UserServiceImplTest {
+public class SignUpServiceImplTest {
     @Autowired
-    private UserServices userServices;
+    private SignUpService signUpService;
 
     @Test
    public void signUp() {
         SignUpRequest signUpRequest = SignUpRequest.builder()
-                .email("akinsolatolani1@yahoo.com")
+                .email("latolani@yahoo.com")
                 .userRole(UserRole.ADMIN)
                 .password("1234")
                 .build();
-       SignUpResponse signUpResponse = userServices.signUp(signUpRequest);
-        assertEquals("Successfully registered", signUpResponse.toString());
+       SignUpResponse signUpResponse = signUpService.signUp(signUpRequest);
+        assertEquals("Successfully registered.", signUpResponse.toString());
     }
 }

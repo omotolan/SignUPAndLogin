@@ -18,9 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Builder
 public class SignUpRequest {
-    @NotBlank(message = "username can to be blank")
-    @NotNull
-    private String username;
+
     @NotBlank(message = "first name can not be empty")
     private String firstName;
     @NotBlank(message = "last name can not be empty")
@@ -30,7 +28,7 @@ public class SignUpRequest {
     @NotBlank(message = "password is required")
     @Size(min = 5, message = "the given password is too short, password must be at least 5 letters long")
     private String password;
-    @Size(min = 11, max = 11)
+    //@Size(min = 11, max = 11)
     private String phoneNumber;
     private int age;
     @Enumerated(EnumType.STRING)
