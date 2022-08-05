@@ -8,10 +8,11 @@ import africa.semicolon.basicsignupandlogin.dto.SignUpResponse;
 import java.util.List;
 
 public interface SignUpService {
-    SignUpResponse signUp(SignUpRequest signUpRequest);
+    String signUp(SignUpRequest signUpRequest);
     void login(LoginRequest loginRequest);
 
     List<User> getAllUsers();
 
     String deleteUser(Long id);
+    String confirmToken(String token);
 }

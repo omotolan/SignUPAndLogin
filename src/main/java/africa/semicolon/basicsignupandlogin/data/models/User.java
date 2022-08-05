@@ -28,8 +28,6 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
-//    private Integer age;
-//    private String username;
     private Boolean locked;
     private Boolean enabled;
     @Enumerated(EnumType.STRING)

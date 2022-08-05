@@ -16,11 +16,12 @@ public class SignUpServiceImplTest {
     @Test
    public void signUp() {
         SignUpRequest signUpRequest = SignUpRequest.builder()
-                .email("latolani@yahoo.com")
+                .email("akinsolakolawole@gmail.com")
                 .userRole(UserRole.ADMIN)
                 .password("1234")
                 .build();
-       SignUpResponse signUpResponse = signUpService.signUp(signUpRequest);
-        assertEquals("Successfully registered.", signUpResponse.toString());
+       String signUpResponse = signUpService.signUp(signUpRequest);
+       assertEquals(" ", signUpResponse);
+       // assertEquals("Successfully registered.", signUpResponse.toString());
     }
 }

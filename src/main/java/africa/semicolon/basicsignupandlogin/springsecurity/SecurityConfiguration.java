@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/login").permitAll()
 //                .and().formLogin();
 
-        http.csrf().disable()
+        http.httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/api/v*/signup/**")
                 .permitAll()
