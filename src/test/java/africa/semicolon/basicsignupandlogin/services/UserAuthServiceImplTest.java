@@ -2,26 +2,33 @@ package africa.semicolon.basicsignupandlogin.services;
 
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
 import africa.semicolon.basicsignupandlogin.dto.SignUpRequest;
-import africa.semicolon.basicsignupandlogin.dto.SignUpResponse;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-public class SignUpServiceImplTest {
+public class UserAuthServiceImplTest {
     @Autowired
-    private SignUpService signUpService;
+    private UserAuthService userAuthService;
+//    @Autowired
+//    private UserRepository userRepository;
+//
+//    @BeforeEach
+//    void setUp() {
+//        userRepository.deleteAll();
+//    }
 
     @Test
-   public void signUp() {
+   public void signUp() throws UnirestException {
         SignUpRequest signUpRequest = SignUpRequest.builder()
-                .email("akinsolakolawole@gmail.com")
+                .email("akinsolakolawolee@gmail.com")
                 .userRole(UserRole.ADMIN)
                 .password("1234")
                 .build();
-       String signUpResponse = signUpService.signUp(signUpRequest);
-       assertEquals(" ", signUpResponse);
+//       String signUpResponse = userAuthService.signUp(signUpRequest);
+//       assertEquals(" ", signUpResponse);
        // assertEquals("Successfully registered.", signUpResponse.toString());
     }
 }

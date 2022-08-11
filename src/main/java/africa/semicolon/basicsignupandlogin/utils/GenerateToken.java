@@ -1,4 +1,4 @@
-package africa.semicolon.basicsignupandlogin.services;
+package africa.semicolon.basicsignupandlogin.utils;
 
 import org.springframework.stereotype.Service;
 
@@ -6,7 +6,6 @@ import java.util.UUID;
 
 @Service
 public class GenerateToken {
-
     public static String generateToken(){
         String token = UUID.randomUUID().toString();
 

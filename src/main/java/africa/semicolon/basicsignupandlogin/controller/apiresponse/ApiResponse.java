@@ -1,4 +1,4 @@
-package africa.semicolon.basicsignupandlogin.apiresponse;
+package africa.semicolon.basicsignupandlogin.controller.apiresponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

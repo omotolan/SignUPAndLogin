@@ -28,37 +28,10 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
-    private Boolean locked;
-    private Boolean enabled;
+    private Boolean isVerified;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
     @CreationTimestamp
     private LocalDateTime localDateTime = LocalDateTime.now();
 
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
-//        return Collections.singletonList(authority);
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return !locked;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return !enabled;
-//    }
 }

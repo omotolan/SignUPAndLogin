@@ -3,16 +3,12 @@ package africa.semicolon.basicsignupandlogin.services;
 import africa.semicolon.basicsignupandlogin.data.models.User;
 import africa.semicolon.basicsignupandlogin.dto.LoginRequest;
 import africa.semicolon.basicsignupandlogin.dto.SignUpRequest;
-import africa.semicolon.basicsignupandlogin.dto.SignUpResponse;
+import africa.semicolon.basicsignupandlogin.dto.UserDto;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
-import java.util.List;
 
-public interface SignUpService {
-    String signUp(SignUpRequest signUpRequest);
-    void login(LoginRequest loginRequest);
-
-    List<User> getAllUsers();
-
-    String deleteUser(Long id);
+public interface UserAuthService {
+    UserDto signUp(SignUpRequest signUpRequest) throws UnirestException;
     String confirmToken(String token);
+    User getUserByEmail(String email);
 }

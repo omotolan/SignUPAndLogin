@@ -23,9 +23,4 @@ public class ConfirmationToken {
     @ManyToOne
     private User user;
 
-
-
-    public Long getId() {
-        return id;
-    }
 }
