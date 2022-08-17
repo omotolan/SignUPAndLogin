@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 
@@ -14,7 +15,7 @@ public class MailGunService implements EmailService {
 
     private final String DOMAIN = System.getenv("DOMAIN");
     private final String PRIVATE_KEY = System.getenv("PRIVATE_KEY");
-
+    @Async
     @Override
     public void sendSimpleMessage(MessageRequest messageRequest) throws UnirestException {
 

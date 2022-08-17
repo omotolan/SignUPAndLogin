@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(Long id) {
+    public String deleteUser(Long id) throws UserDoesNotExistException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new UserDoesNotExistException("User with id: " + id + " does not exist");

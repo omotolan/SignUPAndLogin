@@ -5,6 +5,7 @@ import africa.semicolon.basicsignupandlogin.data.models.User;
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
 import africa.semicolon.basicsignupandlogin.data.repositories.UserRepository;
 import africa.semicolon.basicsignupandlogin.dto.*;
+import africa.semicolon.basicsignupandlogin.exceptions.TokenException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserAlreadyExistException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserDoesNotExistException;
 import africa.semicolon.basicsignupandlogin.services.email.EmailService;
@@ -28,7 +29,7 @@ import java.util.*;
 @Service
 @Slf4j
 @AllArgsConstructor
-@Transactional
+//@Transactional
 public class UserAuthServiceImpl implements UserAuthService, UserDetailsService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -37,7 +38,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
     private final EmailService sendMail;
 
     @Override
-    public UserDto signUp(SignUpRequest signUpRequest) throws UnirestException {
+    public SignUpResponse signUp(SignUpRequest signUpRequest) throws UnirestException, UserAlreadyExistException {
         validateEmail(signUpRequest.getEmail());
 
         User user = mapper.map(signUpRequest, User.class);
@@ -45,13 +46,15 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         user.setPassword(encodedPassword);
         User registeredUser = userRepository.save(user);
 
-        log.info("new user was created " + signUpRequest.getEmail());
+        log.info("new user was created " + registeredUser.getEmail());
 
         String generatedToken = GenerateToken.generateToken();
         ConfirmationToken confirmationToken = new ConfirmationToken();
         confirmationToken.setToken(generatedToken);
         confirmationToken.setUser(registeredUser);
-        confirmationTokenService.saveConfirmationTokenRepository(confirmationToken);
+        confirmationToken.setCreatedAt(LocalDateTime.now());
+        confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         log.info("token generate and saved");
 
@@ -65,10 +68,11 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
 
         log.info("email sent to: " + messageRequest.getReceiver());
 
-        return UserDto.pack(registeredUser);
+        return new SignUpResponse("sign up succefully, a verification link was sent to your" +
+                " mail. Kinldy verify your mail.",  UserDto.pack(registeredUser));
     }
 
-    private void validateEmail(String email) {
+    private void validateEmail(String email) throws UserAlreadyExistException {
         Optional<User> user = userRepository.findUserByEmail(email);
         if (user.isPresent()) {
             throw new UserAlreadyExistException("Email already exist");
@@ -76,11 +80,13 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
     }
 
     @Override
-    public String confirmToken(String token) {
+    public String confirmToken(String token) throws TokenException {
+
         ConfirmationToken confirmationToken = confirmationTokenService
-                .getToken(token)
-                .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                .getToken(token);
+
+        log.info("this is the token : "  + confirmationToken.getToken());
+
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("email already confirmed");
@@ -91,19 +97,23 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("token expired");
         }
+        confirmationToken.setConfirmedAt(LocalDateTime.now());
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
         User user = confirmationToken.getUser();
         user.setIsVerified(Boolean.TRUE);
+
         userRepository.save(user);
+
 
         return "confirmed";
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws UserDoesNotExistException {
         return findUserByEmail(email);
     }
 
-    private User findUserByEmail(String email) {
+    private User findUserByEmail(String email) throws UserDoesNotExistException {
         Optional<User> user = userRepository.findUserByEmail(email);
         if (user.isEmpty()) {
             throw new UserDoesNotExistException("User does not exist");
@@ -111,10 +121,19 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         return user.get();
 
     }
+    public ConfirmationToken findById(Long id) throws TokenException {
+       return confirmationTokenService.findById(id);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserDoesNotExistException("user not found"));
+        User user = null;
+        try {
+            user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserDoesNotExistException("user not found"));
+        } catch (UserDoesNotExistException e) {
+
+            throw new RuntimeException(e);
+        }
         org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user.getUserRole()));
         log.info("Returned user --> {}", returnedUser);
         return returnedUser;

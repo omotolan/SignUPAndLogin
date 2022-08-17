@@ -1,8 +1,15 @@
 package africa.semicolon.basicsignupandlogin.exceptions;
 
-import lombok.AllArgsConstructor;
+public class UserExceptions extends Exception {
 
-@AllArgsConstructor
-public class UserExceptions extends RuntimeException {
-    private String message;
+    private final String message;
+    public UserExceptions(String message){
+        this.message = message;
+    }
+    @Override
+    public String toString() {
+        return "UserExceptions{" +
+                "message='" + message + '\'' +
+                '}';
+    }
 }

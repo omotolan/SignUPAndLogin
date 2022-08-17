@@ -1,5 +1,7 @@
 package africa.semicolon.basicsignupandlogin.utils;
 
+import africa.semicolon.basicsignupandlogin.security.jwt.ExceptionHandlerFilter;
+import africa.semicolon.basicsignupandlogin.security.jwt.JwtAuthenticationFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,5 +24,7 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+
 
 }
