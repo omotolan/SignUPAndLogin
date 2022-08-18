@@ -2,6 +2,7 @@ package africa.semicolon.basicsignupandlogin.dto.request;
 
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Validated
 public class SignUpRequest {
 
     @NotBlank(message = "first name can not be empty")
