@@ -5,6 +5,9 @@ import africa.semicolon.basicsignupandlogin.data.models.User;
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
 import africa.semicolon.basicsignupandlogin.data.repositories.UserRepository;
 import africa.semicolon.basicsignupandlogin.dto.*;
+import africa.semicolon.basicsignupandlogin.dto.reponse.SignUpResponse;
+import africa.semicolon.basicsignupandlogin.dto.request.MessageRequest;
+import africa.semicolon.basicsignupandlogin.dto.request.SignUpRequest;
 import africa.semicolon.basicsignupandlogin.exceptions.TokenException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserAlreadyExistException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserDoesNotExistException;
@@ -29,7 +32,7 @@ import java.util.*;
 @Service
 @Slf4j
 @AllArgsConstructor
-//@Transactional
+@Transactional
 public class UserAuthServiceImpl implements UserAuthService, UserDetailsService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -68,8 +71,8 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
 
         log.info("email sent to: " + messageRequest.getReceiver());
 
-        return new SignUpResponse("sign up succefully, a verification link was sent to your" +
-                " mail. Kinldy verify your mail.",  UserDto.pack(registeredUser));
+        return new SignUpResponse("sign up successfully, a verification link was sent to your" +
+                " mail. Kindly verify your mail.", UserDto.pack(registeredUser));
     }
 
     private void validateEmail(String email) throws UserAlreadyExistException {
@@ -85,7 +88,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token);
 
-        log.info("this is the token : "  + confirmationToken.getToken());
+        log.info("this is the token : " + confirmationToken.getToken());
 
 
         if (confirmationToken.getConfirmedAt() != null) {
@@ -121,8 +124,9 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         return user.get();
 
     }
+
     public ConfirmationToken findById(Long id) throws TokenException {
-       return confirmationTokenService.findById(id);
+        return confirmationTokenService.findById(id);
     }
 
     @Override
@@ -131,8 +135,8 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
         try {
             user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserDoesNotExistException("user not found"));
         } catch (UserDoesNotExistException e) {
-
-            throw new RuntimeException(e);
+            log.error("user does not exist "+ e.getMessage());
+            //throw new RuntimeException(e);
         }
         org.springframework.security.core.userdetails.User returnedUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user.getUserRole()));
         log.info("Returned user --> {}", returnedUser);

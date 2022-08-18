@@ -3,8 +3,8 @@ package africa.semicolon.basicsignupandlogin.controller;
 import africa.semicolon.basicsignupandlogin.controller.apiresponse.ApiResponse;
 import africa.semicolon.basicsignupandlogin.controller.apiresponse.AuthToken;
 import africa.semicolon.basicsignupandlogin.data.models.User;
-import africa.semicolon.basicsignupandlogin.dto.LoginRequest;
-import africa.semicolon.basicsignupandlogin.dto.SignUpRequest;
+import africa.semicolon.basicsignupandlogin.dto.request.LoginRequest;
+import africa.semicolon.basicsignupandlogin.dto.request.SignUpRequest;
 import africa.semicolon.basicsignupandlogin.exceptions.TokenException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserAlreadyExistException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserDoesNotExistException;
@@ -32,25 +32,25 @@ public class UserAuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) throws UnirestException {
-       try {
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
+        try {
 
-           var serviceResponse = userAuthService.signUp(signUpRequest);
-           ApiResponse apiResponse = new ApiResponse(true, serviceResponse);
-           return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
-       }catch (UserAlreadyExistException   e){
-           ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
-           return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-       }
+            var serviceResponse = userAuthService.signUp(signUpRequest);
+            ApiResponse apiResponse = new ApiResponse(true, serviceResponse);
+            return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+        } catch (UnirestException | UserAlreadyExistException e) {
+            ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PostMapping( "/user/confirm/{token}")
-    public ResponseEntity<?> confirm( @PathVariable String token) throws TokenException {
+    @PostMapping("/user/confirm/{token}")
+    public ResponseEntity<?> confirm(@PathVariable String token) {
         try {
             var serviceResponse = userAuthService.confirmToken(token);
             ApiResponse apiResponse = new ApiResponse(true, serviceResponse);
             return new ResponseEntity<>(apiResponse, HttpStatus.ACCEPTED);
-        }catch ( TokenException e){
+        } catch (TokenException e) {
             ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
@@ -68,22 +68,22 @@ public class UserAuthController {
 //    }
 
     @PostMapping("/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws UserDoesNotExistException {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
-        String token;
         try {
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = tokenProvider.generateJWTToken(authentication);
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Invalid Username or Password");
+            String token = tokenProvider.generateJWTToken(authentication);
+            User user = userAuthService.getUserByEmail(loginRequest.getEmail());
+            return new ResponseEntity<>(new AuthToken(token, user.getId()), HttpStatus.OK);
+        } catch (BadCredentialsException | UserDoesNotExistException e) {
+            ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
 
-        User user = userAuthService.getUserByEmail(loginRequest.getEmail());
-        return new ResponseEntity<>(new AuthToken(token, user.getId()), HttpStatus.OK);
-    }
 
+    }
 
     @GetMapping("/hi")
     public String hello() {

@@ -1,6 +1,6 @@
 package africa.semicolon.basicsignupandlogin.services.email;
 
-import africa.semicolon.basicsignupandlogin.dto.MessageRequest;
+import africa.semicolon.basicsignupandlogin.dto.request.MessageRequest;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -18,7 +18,6 @@ public class MailGunService implements EmailService {
     @Async
     @Override
     public void sendSimpleMessage(MessageRequest messageRequest) throws UnirestException {
-
 
         log.info(" checking env " + PRIVATE_KEY);
         log.info(" checking env " + DOMAIN);

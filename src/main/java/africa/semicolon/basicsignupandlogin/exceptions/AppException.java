@@ -1,9 +1,9 @@
 package africa.semicolon.basicsignupandlogin.exceptions;
 
-public class UserExceptions extends Exception {
+public class AppException extends Exception {
 
     private final String message;
-    public UserExceptions(String message){
+    public AppException(String message){
         this.message = message;
     }
     @Override

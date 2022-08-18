@@ -2,8 +2,8 @@ package africa.semicolon.basicsignupandlogin.services;
 
 import africa.semicolon.basicsignupandlogin.data.models.ConfirmationToken;
 import africa.semicolon.basicsignupandlogin.data.models.User;
-import africa.semicolon.basicsignupandlogin.dto.SignUpRequest;
-import africa.semicolon.basicsignupandlogin.dto.SignUpResponse;
+import africa.semicolon.basicsignupandlogin.dto.request.SignUpRequest;
+import africa.semicolon.basicsignupandlogin.dto.reponse.SignUpResponse;
 import africa.semicolon.basicsignupandlogin.exceptions.TokenException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserAlreadyExistException;
 import africa.semicolon.basicsignupandlogin.exceptions.UserDoesNotExistException;

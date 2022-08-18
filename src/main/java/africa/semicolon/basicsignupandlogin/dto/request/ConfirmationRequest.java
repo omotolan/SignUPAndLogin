@@ -1,4 +1,4 @@
-package africa.semicolon.basicsignupandlogin.dto;
+package africa.semicolon.basicsignupandlogin.dto.request;
 
 import africa.semicolon.basicsignupandlogin.data.models.ConfirmationToken;
 import africa.semicolon.basicsignupandlogin.data.models.User;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class ConfirmationDto {
+public class ConfirmationRequest {
     private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
@@ -19,8 +19,8 @@ public class ConfirmationDto {
     private User user;
 
 
-    public static ConfirmationDto packDto(ConfirmationToken confirmationToken){
-        return ConfirmationDto.builder()
+    public static ConfirmationRequest packDto(ConfirmationToken confirmationToken){
+        return ConfirmationRequest.builder()
                 .confirmedAt(confirmationToken.getConfirmedAt())
                 .createdAt(confirmationToken.getCreatedAt())
                 .token(confirmationToken.getToken())

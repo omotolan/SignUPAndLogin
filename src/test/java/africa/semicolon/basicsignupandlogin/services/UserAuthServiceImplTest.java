@@ -1,13 +1,12 @@
 package africa.semicolon.basicsignupandlogin.services;
 
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
-import africa.semicolon.basicsignupandlogin.dto.SignUpRequest;
+import africa.semicolon.basicsignupandlogin.dto.request.SignUpRequest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class UserAuthServiceImplTest {
     @Autowired

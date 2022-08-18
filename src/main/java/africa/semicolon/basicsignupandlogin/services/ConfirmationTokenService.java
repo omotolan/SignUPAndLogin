@@ -7,8 +7,10 @@ import java.util.Optional;
 
 public interface ConfirmationTokenService {
     void saveConfirmationToken(ConfirmationToken token);
+
     ConfirmationToken getToken(String token) throws TokenException;
 
     ConfirmationToken findById(Long id) throws TokenException;
-//    void setConfirmedAt(String token);
+
+    void deleteExpiredToken();
 }

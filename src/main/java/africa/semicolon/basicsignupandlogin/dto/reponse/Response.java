@@ -1,4 +1,4 @@
-package africa.semicolon.basicsignupandlogin.dto;
+package africa.semicolon.basicsignupandlogin.dto.reponse;
 
 import lombok.AllArgsConstructor;
 

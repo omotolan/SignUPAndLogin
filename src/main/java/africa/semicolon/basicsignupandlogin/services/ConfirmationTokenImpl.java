@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,9 +44,11 @@ public class ConfirmationTokenImpl implements ConfirmationTokenService {
         return confirmationToken;
 
     }
-
+@Override
     public void deleteExpiredToken() {
-        confirmationTokenRepository.findAll();
+      List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll().stream().filter(x ->
+              x.getExpiresAt().isBefore(LocalDateTime.now())).toList();
+      confirmationTokenRepository.deleteAll(confirmationTokenList);
     }
 
 

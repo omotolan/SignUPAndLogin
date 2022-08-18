@@ -1,4 +1,4 @@
-package africa.semicolon.basicsignupandlogin.dto;
+package africa.semicolon.basicsignupandlogin.dto.request;
 
 import africa.semicolon.basicsignupandlogin.data.models.UserRole;
 import lombok.*;
