@@ -22,7 +22,7 @@ public class SetUpDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         String password = System.getenv("ADMIN_PASSWORD");
-        if (userRepository.findUserByEmail("admin@yahoo.com").isEmpty()) {
+        if (userRepository.findUserByEmailIgnoreCase("admin@yahoo.com").isEmpty()) {
             User user = new User();
             user.setFirstName("admin");
             user.setLastName("user");

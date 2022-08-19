@@ -76,7 +76,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
     }
 
     private void validateEmail(String email) throws UserAlreadyExistException {
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = userRepository.findUserByEmailIgnoreCase(email);
         if (user.isPresent()) {
             throw new UserAlreadyExistException("Email already exist");
         }
@@ -117,7 +117,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
     }
 
     private User findUserByEmail(String email) throws UserDoesNotExistException {
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = userRepository.findUserByEmailIgnoreCase(email);
         if (user.isEmpty()) {
             throw new UserDoesNotExistException("User does not exist");
         }
@@ -133,7 +133,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = null;
         try {
-            user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserDoesNotExistException("user not found"));
+            user = userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() -> new UserDoesNotExistException("user not found"));
         } catch (UserDoesNotExistException e) {
             log.error("user does not exist "+ e.getMessage());
             //throw new RuntimeException(e);
