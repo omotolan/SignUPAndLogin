@@ -71,7 +71,7 @@ public class UserAuthServiceImpl implements UserAuthService, UserDetailsService 
 
         log.info("email sent to: " + messageRequest.getReceiver());
 
-        return new SignUpResponse("sign up successfully, a verification link was sent to your" +
+        return new SignUpResponse("sign up successful, a verification link was sent to your" +
                 " mail. Kindly verify your mail.", UserDto.pack(registeredUser));
     }
 
